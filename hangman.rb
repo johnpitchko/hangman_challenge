@@ -4,6 +4,8 @@
 #
 # The input filename will come as an argument (see completeness_test).
 
+require 'byebug'
+
 class Hangman
   attr_accessor :life_left, :word
 
@@ -13,8 +15,7 @@ class Hangman
     @guessed_word = @word.gsub(/\w/, '_')
     @guessed_chars = []
     
-    @word.length.times { print '_' }
-    print "life left: #{@life_left}\n"
+    print_game_status
   end
 
   def guess(guessed_char)
@@ -26,19 +27,27 @@ class Hangman
       @life_left -= 1
     end
   end
+  
+  def incorrect_guesses
+    @guessed_chars.join.tr @guessed_word, ''
+  end
 
-  def won?
-    if @guessed_word == @word
+  def print_game_status
+    if won?
       puts "#{@guessed_word} YOU WIN!"
-      true
     else
       if @life_left == 0
         puts "#{@guessed_word} YOU LOSE!"
       else
-        print "#{@guessed_word} life left: #{@life_left}\n"
+        print "#{@guessed_word} life left: #{@life_left}"
+        print " incorrect guesses: #{incorrect_guesses}" unless incorrect_guesses.empty?
+        print "\n"
       end
-      false
     end
+  end
+
+  def won?
+    @guessed_word == @word
   end
   
   def update_guessed_word
@@ -57,9 +66,7 @@ class Hangman
 end
 
 input_filename = ARGV[0]
-
 file = File.new(input_filename)
-
 lines = file.readlines
 
 lines.each do |line|
@@ -69,7 +76,8 @@ lines.each do |line|
   if line.length > 1 # word
     @hangman = Hangman.new(6, line) 
   else
+    next if @hangman.won?
     @hangman.guess(line)
-    @hangman.won?
+    @hangman.print_game_status
   end
 end

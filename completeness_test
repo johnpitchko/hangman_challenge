@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TMP_FILENAME=/tmp/hangman_output
-./hangman input.txt > $TMP_FILENAME
+ruby ./hangman.rb input.txt > $TMP_FILENAME
 diff $TMP_FILENAME expected_output.txt
 
 if [ $? == 0 ]
