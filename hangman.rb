@@ -20,12 +20,9 @@ class Hangman
 
   def guess(guessed_char)
     @guessed_chars << guessed_char
+    @guessed_word = compute_guessed_word
 
-    if @word.include? guessed_char
-      update_guessed_word 
-    else
-      @life_left -= 1
-    end
+    @life_left -= 1 unless @word.include? guessed_char
   end
   
   # Return the letters that were guess that are not part of the word.
@@ -53,8 +50,8 @@ class Hangman
   
   # Loop through each character in the correct word.
   # If the letter was *NOT* one of the guessed letters, then replace it with a _
-  def update_guessed_word
-    @guessed_word = @word.chars.map { |c| @guessed_chars.include?(c) ? c : '_' }.join
+  def compute_guessed_word
+    @word.chars.map { |c| @guessed_chars.include?(c) ? c : '_' }.join
   end
 end
 
