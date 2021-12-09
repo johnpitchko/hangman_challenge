@@ -7,13 +7,11 @@
 require 'byebug'
 
 class Hangman
-  attr_accessor :life_left, :word
-
   def initialize(life_left = 6, word)
     @life_left = 6
     @word = word
-    @guessed_word = @word.gsub(/\w/, '_')
     @guessed_chars = []
+    @guessed_word = compute_guessed_word
     
     print_game_status
   end
