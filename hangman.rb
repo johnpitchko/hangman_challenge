@@ -28,6 +28,7 @@ class Hangman
     end
   end
   
+  # Return the letters that were guess that are not part of the word.
   def incorrect_guesses
     @guessed_chars.join.tr @guessed_word, ''
   end
@@ -50,18 +51,10 @@ class Hangman
     @guessed_word == @word
   end
   
+  # Loop through each character in the correct word.
+  # If the letter was *NOT* one of the guessed letters, then replace it with a _
   def update_guessed_word
-    chars = @word.split('')
-
-    chars.map! do |char|
-      unless @guessed_chars.include?(char)
-        '_'
-      else
-        char
-      end
-    end
-
-    @guessed_word = chars.join
+    @guessed_word = @word.chars.map { |c| @guessed_chars.include?(c) ? c : '_' }.join
   end
 end
 
